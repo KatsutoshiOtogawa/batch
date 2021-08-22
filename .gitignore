@@ -1,0 +1,6 @@
+go.sum
+
+*.db
+
+output/*
+!/output/.gitignore
