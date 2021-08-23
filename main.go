@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/KatsutoshiOtogawa/batch/lib/config"
+	pornhub "github.com/KatsutoshiOtogawa/batch/model/porunhub"
 	"github.com/KatsutoshiOtogawa/batch/model/users"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/urfave/cli/v2"
@@ -50,6 +51,8 @@ func main() {
 			case "users":
 				users.Invoke(&args)
 
+			case "pornhub":
+				pornhub.Invoke(&args)
 			default:
 				fmt.Println(pkgName, "は存在しないパッケージです。")
 			}
