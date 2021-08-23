@@ -16,6 +16,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # you set GOPATH. install go package 
 ENV GOPATH /go
+ENV PATH $GOPATH/bin:$PATH
 
 # これが無いとvscodeから書き込めない。公式のDockerfileもこれなので大丈夫なはず。
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"

@@ -29,7 +29,14 @@
 
 	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
 	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-
+	"runArgs": [
+		// .envファイルのファイルを読み込んでcontainerに設定。remoteEnvでその値を参照してさらに複雑なことができる
+        "--env-file", ".env"
+    ], 
+	"remoteEnv": {
+		// go instlall時にpathが通るように修正。
+		"PATH": "${containerEnv:GOPATH}/bin:${containerEnv:PATH}",
+	},
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
 }
