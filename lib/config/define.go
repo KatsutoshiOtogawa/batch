@@ -5,6 +5,7 @@ import (
 )
 
 type Args struct {
-	FuncName string
-	Db       *sql.DB
+	FuncName    string
+	AlphabetFlg uint
+	Db          *sql.DB
 }

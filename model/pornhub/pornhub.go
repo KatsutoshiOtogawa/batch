@@ -51,18 +51,23 @@ func Mock(args *config.Args) error {
 	var imageBuf []byte
 
 	// macの横幅、縦幅
-	width, height := 2880, 1800
+	const (
+		MacBookProWidth  = 2880
+		MacBookProHeight = 1800
+	)
+
+	width, height := MacBookProWidth, MacBookProHeight
 
 	err := chromedp.Run(ctx,
 		emulation.SetUserAgentOverride("WebScraper 1.0"),
 		emulation.SetDeviceMetricsOverride(int64(width), int64(height), 1.0, false),
 		// navigate pornhub
-		chromedp.Navigate("https://jp.pornhub.com"),
+		chromedp.Navigate(HomePageUrl),
 		// porunhub_login
-		// chromedp.Click("//*[@id=\"headerLoginLink\"]", chromedp.BySearch),
-		// chromedp.SendKeys("//*[@id=\"usernameModal\"]", pornhub_usernmae, chromedp.BySearch),
-		// chromedp.SendKeys("//*[@id=\"passwordModal\"]", pornhub_password, chromedp.BySearch),
-		// chromedp.Click("//*[@id=\"signinSubmit\"]", chromedp.BySearch),
+		chromedp.Click("//*[@id=\"headerLoginLink\"]", chromedp.BySearch),
+		chromedp.SendKeys("//*[@id=\"usernameModal\"]", pornhub_usernmae, chromedp.NodeVisible, chromedp.BySearch),
+		chromedp.SendKeys("//*[@id=\"passwordModal\"]", pornhub_password, chromedp.NodeVisible, chromedp.BySearch),
+		chromedp.Click("//*[@id=\"signinSubmit\"]", chromedp.NodeVisible, chromedp.BySearch),
 
 		// でバックログ
 		chromedp.CaptureScreenshot(&imageBuf),
@@ -89,3 +94,5 @@ func Mock(args *config.Args) error {
 	fmt.Printf("\n\nTook: %f secs\n", time.Since(start).Seconds())
 	return nil
 }
+
+// https://idolwiki.web.fc2.com/sagyou.html

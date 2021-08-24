@@ -2,13 +2,11 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/KatsutoshiOtogawa/batch/lib/config"
-	pornhub "github.com/KatsutoshiOtogawa/batch/model/porunhub"
-	"github.com/KatsutoshiOtogawa/batch/model/users"
+	"github.com/KatsutoshiOtogawa/batch/model/pkg"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/urfave/cli/v2"
 )
@@ -47,18 +45,10 @@ func main() {
 
 				Db: db,
 			}
-			switch pkgName {
-			case "users":
-				users.Invoke(&args)
 
-			case "pornhub":
-				pornhub.Invoke(&args)
-			default:
-				fmt.Println(pkgName, "は存在しないパッケージです。")
-			}
+			pkg.Invoke(pkgName, &args)
 
 			return nil
-
 		},
 	}
 
