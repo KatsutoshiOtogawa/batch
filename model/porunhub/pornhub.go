@@ -29,14 +29,19 @@ func Mock(args *config.Args) error {
 		return err
 	}
 
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.Flag("no-sandbox", true),
+	)
+
+	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), opts...)
+
 	ctx, cancel := chromedp.NewContext(
-		context.Background(),
+		allocCtx,
 		chromedp.WithLogf(log.Printf),
 	)
-	defer cancel()
 
 	// create a timeout
-	ctx, cancel = context.WithTimeout(ctx, 15*time.Second)
+	ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 	start := time.Now()
 	// navigate to a page, wait for an element, click
@@ -45,16 +50,19 @@ func Mock(args *config.Args) error {
 
 	var imageBuf []byte
 
+	// macの横幅、縦幅
+	width, height := 2880, 1800
+
 	err := chromedp.Run(ctx,
 		emulation.SetUserAgentOverride("WebScraper 1.0"),
-
+		emulation.SetDeviceMetricsOverride(int64(width), int64(height), 1.0, false),
 		// navigate pornhub
 		chromedp.Navigate("https://jp.pornhub.com"),
 		// porunhub_login
-		chromedp.Click("//*[@id=\"headerLoginLink\"]", chromedp.BySearch),
-		chromedp.SendKeys("//*[@id=\"usernameModal\"]", pornhub_usernmae, chromedp.BySearch),
-		chromedp.SendKeys("//*[@id=\"passwordModal\"]", pornhub_password, chromedp.BySearch),
-		chromedp.Click("//*[@id=\"signinSubmit\"]", chromedp.BySearch),
+		// chromedp.Click("//*[@id=\"headerLoginLink\"]", chromedp.BySearch),
+		// chromedp.SendKeys("//*[@id=\"usernameModal\"]", pornhub_usernmae, chromedp.BySearch),
+		// chromedp.SendKeys("//*[@id=\"passwordModal\"]", pornhub_password, chromedp.BySearch),
+		// chromedp.Click("//*[@id=\"signinSubmit\"]", chromedp.BySearch),
 
 		// でバックログ
 		chromedp.CaptureScreenshot(&imageBuf),
@@ -73,7 +81,7 @@ func Mock(args *config.Args) error {
 	}
 
 	t := time.Now()
-	if err := ioutil.WriteFile(fmt.Sprintf("%4d%2d%2d %2d:%2d%2d %d.png", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond()), imageBuf, 0644); err != nil {
+	if err := ioutil.WriteFile(fmt.Sprintf("./log/screenshot/%4d-%02d-%2d %02d:%02d:%02d %d.png", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond()), imageBuf, 0644); err != nil {
 		log.Fatal(err)
 	}
 

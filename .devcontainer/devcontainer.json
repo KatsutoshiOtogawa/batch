@@ -36,6 +36,13 @@
 	"remoteEnv": {
 		// go instlall時にpathが通るように修正。
 		"PATH": "${containerEnv:GOPATH}/bin:${containerEnv:PATH}",
+
+		// timezoneを日本にする。docker特有の環境変数。
+		"TZ": "Asia/Tokyo",
+		// chromeを日本語設定にするために必要。
+		"LANG": "ja_JP.UTF-8",
+		"LANGUAGE": "ja_JP.UTF-8",
+		"LC_ALL": "ja_JP.UTF-8",
 	},
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode"
