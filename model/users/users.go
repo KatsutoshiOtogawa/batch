@@ -2,6 +2,7 @@ package users
 
 // ユーザーに関する処理のエントリーポイントです。
 import (
+	"database/sql"
 	"log"
 
 	"github.com/KatsutoshiOtogawa/batch/lib/config"
@@ -22,4 +23,27 @@ func Mock(args *config.Args) error {
 		log.Println(err.Error())
 	}
 	return nil
+}
+
+// ログインが許可されているユーザーかどうか
+func PermittedLoginUser(username string, password string, db *sql.DB) (bool, error) {
+
+	//
+	stmt, err := db.Prepare(`
+	select ?,?
+	`)
+	if err != nil {
+		log.Println(err.Error())
+		return false, err
+	}
+	_, err = stmt.Exec(
+		username,
+		password,
+	)
+	if err != nil {
+		log.Println(err.Error())
+
+	}
+
+	return true, nil
 }
